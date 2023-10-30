@@ -20,10 +20,24 @@ class OrderManager:
     def get_orders(self, username):
         print(self.orders)
         return [order.__json__() for order in self.orders if order.user == username]
+
+    def get_all_orders(self):
+        print(self.orders)
+        return [order.__json__() for order in self.orders]
     
     def cancel_order(self, username, order_id):
         for order in self.orders:
             if order.id == int(order_id) and order.user == username:
+            
+                self.orders.remove(order)
+                
+                return self.orders
+            else:
+                return None
+            
+    def admin_cancel_order(self, order_id):
+        for order in self.orders:
+            if order.id == int(order_id):
             
                 self.orders.remove(order)
                 

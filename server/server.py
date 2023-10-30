@@ -114,6 +114,22 @@ def get_orders(user):
     else:
         return jsonify({'message': 'Orders not found'}), 404
     
+@app.route('/get_orders', methods=['GET'])
+@jwt_required()
+def get_all_orders():
+    user_role = get_jwt().get('role')
+
+    if user_role == 'admin':
+        orders = order_manager.get_all_orders()
+        print(orders)
+
+        if orders:
+            return jsonify({'orders': orders}), 200
+        else:
+            return jsonify({'message': 'Orders not found'}), 404
+    else:
+        return jsonify({'message': 'Unauthorized'}), 401
+    
 @app.route('/cancel_order/<username>/<order_id>', methods=['DELETE'])
 def cancel_order(username, order_id):
     cancel_order = order_manager.cancel_order(username, order_id)
@@ -123,6 +139,19 @@ def cancel_order(username, order_id):
     else:
         return jsonify({'message': 'Order cancel could not be completed!'}), 404
     
+@app.route('/cancel_order/<order_id>', methods=['DELETE'])
+@jwt_required()
+def admin_cancel_order(order_id):
+    user_role = get_jwt().get('role')
+
+    if user_role == 'admin':
+        cancel_order = order_manager.admin_cancel_order(order_id)
+
+        if cancel_order is not None:
+            return jsonify({'message': 'Order has been successfully canceled!'}), 200
+        else:
+            return jsonify({'message': 'Order cancel could not be completed!'}), 404
+
 @app.route('/admin_menu', methods=['GET'])
 @jwt_required()
 def admin_menu():

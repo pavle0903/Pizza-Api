@@ -65,14 +65,22 @@ def get_logged_user():
     return jsonify(logged_user)
 
 @app.route('/create_pizza', methods=['POST'])
+@jwt_required()
 def create_pizza():
-    data = request.get_json()
-    add_pizza = pizza_manager.add_pizza(data)
+    current_user = get_jwt_identity()
+    user_role = get_jwt().get('role')
 
-    if add_pizza:
-        return jsonify({'message' : f'Pizza added to menu'}), 201
+    if user_role == 'admin':
+
+        data = request.get_json()
+        add_pizza = pizza_manager.add_pizza(data)
+
+        if add_pizza:
+            return jsonify({'message' : f'Pizza added to menu'}), 201
+        else:
+            return jsonify({'message': 'Pizza creating could not be completed. Try again!'}), 409
     else:
-        return jsonify({'message': 'Pizza creating could not be completed. Try again!'}), 409
+        return jsonify({'message': 'Unauthorized'}), 401
 
 @app.route('/get_pizzas', methods=['GET'])
 def get_pizzas():
@@ -110,7 +118,7 @@ def get_orders(user):
 def cancel_order(username, order_id):
     cancel_order = order_manager.cancel_order(username, order_id)
 
-    if cancel_order:
+    if cancel_order is not None:
         return jsonify({'message': 'Order has been successfully canceled!'}), 200
     else:
         return jsonify({'message': 'Order cancel could not be completed!'}), 404
@@ -125,6 +133,21 @@ def admin_menu():
         return jsonify(message=f'Welcome, {current_user}! You have access to the admin menu.'), 200
     else:
         return jsonify({'error': 'Unauthorized access'}), 401
+    
+@app.route('/delete_pizza/<pizza_id>', methods=['DELETE'])
+@jwt_required()
+def delete_pizza(pizza_id):
+    user_role = get_jwt().get('role')
+
+    if user_role == 'admin':
+        delete = pizza_manager.delete_pizza(pizza_id)
+        if delete:
+            return jsonify({'message': 'Pizza is successfully deleted from the menu!'}), 200
+        else:
+            return jsonify({'message': 'Pizza ID does not exists'}), 404
+    else:
+        return jsonify({'message': "Unauthorized action!"}), 401
+
 
 if __name__ == '__main__':
     app.run(port=8000)

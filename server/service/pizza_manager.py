@@ -24,3 +24,13 @@ class PizzaManager():
     
     def get_pizzas(self):
         return [pizza.__json__() for pizza in self.pizzas]
+    
+    def delete_pizza(self,id):
+        for pizza in self.pizzas:
+            print(pizza.id, int(id), "ovo su id-evi")
+            if pizza.id == int(id):
+                print("u ifu sam")
+                self.pizzas.remove(pizza)
+                print("pica obrisana")
+                return self.pizzas
+        return None

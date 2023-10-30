@@ -24,8 +24,10 @@ class OrderManager:
     def cancel_order(self, username, order_id):
         for order in self.orders:
             if order.id == int(order_id) and order.user == username:
-                print(order, "ovo je order u ifu")
+            
                 self.orders.remove(order)
-                print(self.orders, "ovo su orderi nakon brisanja")
+                
                 return self.orders
+            else:
+                return None
        

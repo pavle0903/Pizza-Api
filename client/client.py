@@ -27,7 +27,7 @@ def login_user():
     while not logged_in:
         print("------ LOGIN SCREEN ------")
         username = input('Enter username: ')
-        password = input('Enter your password: ')
+        password = getpass.getpass('Enter your password: ')
 
         data = {'username': username, 'password': password}
         response = requests.post(baseUrl + "/login", json=data)
@@ -146,6 +146,8 @@ def cancel_order(headers):
             print("Order has been successfully canceled!")
         else:
             print(f"Invalid order number. Try again. ({response.status_code})")
+    else:
+        print("There is no orders at this moment!")
 
 def create_pizza(headers):
     pizza_name = input("Enter pizza name: ")
@@ -279,7 +281,7 @@ def reg_log_menu():
             time.sleep(0.3)
             print("------ REGISTRATION SCREEN ------")
             username = input('Enter username: ')
-            password = input('Enter your password: ')
+            password = getpass.getpass('Enter your password: ')
             register_user(username, password)
         elif choice == '2':
             login_user()

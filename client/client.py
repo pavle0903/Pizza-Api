@@ -114,17 +114,18 @@ def admin_menu(access_token):
 
 def show_menu():
     response1 = requests.get(baseUrl + "/get_pizzas")
-
+    time.sleep(0.5)
     if response1.status_code == 200:
         pizza_list = response1.json().get('pizzas')
         #counter = 0
         if not pizza_list:
             print("There is no pizzas on menu!")
         else:
-            print("------ MENU ------")
+            print("------ PIZZA MENU ------")
             for pizza in pizza_list:
                 print(f"{pizza['id']}. " + pizza['name'])
-            print("------------------")
+            print("------------------------")
+    time.sleep(0.5)
     return response1
        
 
@@ -246,6 +247,9 @@ def menu_list(user):
 
             if response.status_code == 200:
                 print("Your order has been successfully canceled!")
+
+            elif response.status_code == 403:
+                print("Your order status is ready! Cannot be canceled!")
             else:
                 print(f"Invalid order number. Try again. ({response.status_code})")
 

@@ -1,4 +1,5 @@
 import json
+from dotenv import load_dotenv
 import os
 from service.user_manager import UserManager
 from service.pizza_manager import PizzaManager
@@ -8,7 +9,12 @@ from flask_jwt_extended import JWTManager, jwt_required, create_access_token, ge
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY')
+# Load environment variables from .env file
+load_dotenv()
+
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+
+#app.config['SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY')
 
 jwt = JWTManager(app)
 
@@ -134,10 +140,15 @@ def get_all_orders():
 def cancel_order(username, order_id):
     cancel_order = order_manager.cancel_order(username, order_id)
 
-    if cancel_order is not None:
-        return jsonify({'message': 'Order has been successfully canceled!'}), 200
-    else:
-        return jsonify({'message': 'Order cancel could not be completed!'}), 404
+    return jsonify({'message': cancel_order[0],}), cancel_order[1]
+
+    # if cancel_order[1] == 200:
+    #     return jsonify({'message': 'Order has been successfully canceled!'}), 200
+    # elif cancel_order is False:
+    #     return jsonify({'message': 'Order cancel could not be completed!'}), 404
+    # elif cancel_order is True:
+    #     return jsonify({'message': 'Order can not be canceled since its order is ready!'}), 403
+
     
 @app.route('/cancel_order/<order_id>', methods=['DELETE'])
 @jwt_required()

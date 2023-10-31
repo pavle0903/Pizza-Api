@@ -12,7 +12,7 @@ class PizzaManager():
         self.pizzas.append(pizza2)
         self.pizzas.append(pizza3)
 
-        self.next_pizza_id = 0
+        self.next_pizza_id = len(self.pizzas)-1
 
     def add_pizza(self, pizza_data):
         pizza_id = self.next_pizza_id +1

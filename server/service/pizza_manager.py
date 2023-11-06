@@ -16,7 +16,7 @@ class PizzaManager():
 
     def add_pizza(self, pizza_data):
         pizza_id = self.next_pizza_id +1
-
+        print(pizza_data, "ovo je pizza data u manageru")
         pizza = Pizza(pizza_id, name=pizza_data['name'], description=pizza_data['description'], price=pizza_data['price'])
         self.pizzas.append(pizza)
         print(self.pizzas)
@@ -27,10 +27,7 @@ class PizzaManager():
     
     def delete_pizza(self,id):
         for pizza in self.pizzas:
-            print(pizza.id, int(id), "ovo su id-evi")
-            if pizza.id == int(id):
-                print("u ifu sam")
+            if pizza.id == int(id):          
                 self.pizzas.remove(pizza)
-                print("pica obrisana")
                 return self.pizzas
         return None

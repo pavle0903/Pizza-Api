@@ -7,9 +7,6 @@ class OrderManager:
     def __init__(self):
         self.orders = []
         self.order_id = 0
-        # self.orders.append(Order(0, 'nikola', 'neka pica', 30, 'not ready'))
-        # self.orders.append(Order(2, 'petar', 'neka pica', 30, 'not ready'))
-        # self.orders.append(Order(3, 'marija', 'neka pica', 30, 'not ready'))
 
     def make_order(self, user, pizza, price, status='Not ready'):
 
@@ -23,8 +20,8 @@ class OrderManager:
     
     def delayed_status_change(self, order):
         time.sleep(15)
-        order.status = 'Ready'
-        print(f"Order {order.id} is now Ready.")
+        order.status = 'Ready to be delivered'
+        print(f"Order {order.id} is now ready to be delivered.")
     
     def get_orders(self, username):
         print(self.orders)
@@ -38,11 +35,11 @@ class OrderManager:
         not_ready = True
         for order in self.orders:
             if order.id == int(order_id) and order.user == username:
-                if order.status != 'Ready':
+                if order.status != 'Ready to be delivered':
                     self.orders.remove(order)
                     return ("Successfully canceled", 200)
                 else:
-                    return ("Your order status is ready and cannot be canceled!", 403)
+                    return ("Your order status is ready to be delivered, cannot be canceled!", 403)
             else:
                 return ("Invalid id. Cannot be deleted", 404)
                 

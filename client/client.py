@@ -37,8 +37,8 @@ def login_user():
             role = response.json().get('role')
             if access_token:
                 os.environ['JWT_TOKEN'] = access_token
-            else:
-                print("Invalid server response")
+            # else:
+            #     print("Invalid server response")
             print(f"Welcome {username}! You are successfully logged in!")
             logged_in = True
             #time.sleep(1)
@@ -214,6 +214,7 @@ def menu_list(user):
                 
                 if selected_pizza:
                     print(f"You selected {selected_pizza['name']}. The price is: {selected_pizza['price']}")
+                    time.sleep(0.3)
                 else:
                     print("Invalid selection. Please enter the valid ID.")
             else:
@@ -268,6 +269,7 @@ def create_order(user, pizza):
 
     if response.status_code == 201:
         print(f'Order is successfully created!')
+        time.sleep(0.3)
     else:
         print(f"Error: {response.status_code}")
 

@@ -32,16 +32,20 @@ class OrderManager:
         return [order.__json__() for order in self.orders]
     
     def cancel_order(self, username, order_id):
-        not_ready = True
-        for order in self.orders:
-            if order.id == int(order_id) and order.user == username:
-                if order.status != 'Ready to be delivered':
-                    self.orders.remove(order)
-                    return ("Successfully canceled", 200)
+        
+        if not self.orders:
+            return ("There is no orders at this moment!", 404)
+        else:
+            for order in self.orders:
+                if order.id == int(order_id) and order.user == username:
+                    if order.status != 'Ready to be delivered':
+                        self.orders.remove(order)
+                        return ("Successfully canceled", 200)
+                    else:
+                        return ("Your order status is ready to be delivered, cannot be canceled!", 403)
                 else:
-                    return ("Your order status is ready to be delivered, cannot be canceled!", 403)
-            else:
-                return ("Invalid id. Cannot be deleted", 404)
+                    return ("Invalid id. Cannot be deleted", 404)
+        
                 
             
     def admin_cancel_order(self, order_id):

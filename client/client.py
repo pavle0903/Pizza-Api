@@ -14,9 +14,11 @@ def register_user(username, password):
 
     if response.status_code == 201:
         print(f"Registration successful for user {username}!")
+        time.sleep(0.4)
         login_user()
     elif response.status_code == 409:
         print("Username is already taken. Please choose a different username.")
+        time.sleep(0.4)
     else:
         print(f"Error: {response.json().get('error')}")
 
@@ -41,10 +43,11 @@ def login_user():
             #     print("Invalid server response")
             print(f"Welcome {username}! You are successfully logged in!")
             logged_in = True
-            #time.sleep(1)
+            time.sleep(0.4)
             get_logged_user()
         elif response.status_code == 409:
             print("Invalid credentials. Please check your username and password.")
+            time.sleep(0.4)
         else:
             print(f"Error: {response.json().get('error')}")
             return None, None
@@ -64,14 +67,16 @@ def get_logged_user():
                 response = requests.get(f'{baseUrl}/admin_menu', headers=headers)
 
                 if response.status_code == 200:
-
+                    time.sleep(0.4)
                     admin_menu(access_token)
                 else:
                     print(f"Error accessing admin menu: {response.json().get('error')}")
+                    time.sleep(0.4)
             else:
                 print("JWT_TOKEN not found in the environment. Please log in first.")
+                time.sleep(0.4)
         else:
-
+            time.sleep(0.4)
             menu_list(user)
 
     elif response.status_code == 404:
@@ -96,21 +101,24 @@ def admin_menu(access_token):
 
         if choice == '1':
             create_pizza(headers)
+            time.sleep(0.4)
         
         elif choice == '2':
             delete_pizza(headers)
+            time.sleep(0.4)
         
         elif choice == '3':
             cancel_order(headers)
-
+            time.sleep(0.4)
         elif choice == '4':
             show_menu()
-        
+            time.sleep(0.4)
         elif choice == '5':
             break
 
         else:
             print("Invalid choice. Try again!")
+            time.sleep(0.4)
 
 def show_menu():
     response1 = requests.get(baseUrl + "/get_pizzas")
@@ -119,7 +127,7 @@ def show_menu():
         pizza_list = response1.json().get('pizzas')
         #counter = 0
         if not pizza_list:
-            print("There is no pizzas on menu!")
+            print("There is no pizzas on the menu!")
         else:
             print("------ PIZZA MENU ------")
             for pizza in pizza_list:
@@ -215,12 +223,14 @@ def menu_list(user):
                 if selected_pizza:
                     print(f"You selected {selected_pizza['name']}. The price is: {selected_pizza['price']}")
                     time.sleep(0.3)
+                    create_order(user, selected_pizza)
                 else:
                     print("Invalid selection. Please enter the valid ID.")
+                    time.sleep(0.4)
             else:
-                print("There is no pizzas on menu")
-
-            create_order(user, selected_pizza)
+                
+                time.sleep(0.4)
+                break
 
 
         
@@ -238,7 +248,8 @@ def menu_list(user):
                 print('-------------------------')
                 time.sleep(0.3)
             else:
-                print("You dont have any orders yet!")
+                print("You do not have any orders yet!")
+                time.sleep(0.3)
             #print(orders)
         
         elif choice == '3':
@@ -248,20 +259,24 @@ def menu_list(user):
 
             if response.status_code == 200:
                 print("Your order has been successfully canceled!")
+                time.sleep(0.4)
 
             elif response.status_code == 403:
                 print("Your order status is ready! Cannot be canceled!")
+                time.sleep(0.4)
             else:
                 print(f"Invalid order number. Try again. ({response.status_code})")
+                time.sleep(0.4)
 
         elif choice == '4':
             response = show_menu()
-
+            
         elif choice == '5':
             break
 
         else:
             print("Invalid choice. Try again!")
+            time.sleep(0.4)
     
 def create_order(user, pizza):
     data = {'username': user['username'], 'pizza': pizza}

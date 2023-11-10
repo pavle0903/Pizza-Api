@@ -27,10 +27,6 @@ user_handler = UserHandler()
 pizza_handler = PizzaHandler()
 order_handler = OrderHandler()
 
-pizza_manager = PizzaManager()
-user_manager = UserManager()
-order_manager = OrderManager()
-
 @app.route('/register', methods=['POST'])
 def register():
     data = request.get_json()

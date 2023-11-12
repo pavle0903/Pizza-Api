@@ -5,7 +5,10 @@ import getpass
 import os
 
 #baseUrl = 'http://0.0.0.0:8000'
-baseUrl = 'http://127.0.0.1:8000'
+#baseUrl = 'http://127.0.0.1:8000'
+
+#Docker ip
+baseUrl = 'http://172.18.0.2:8000'
 
 def register_user(username, password):
     #url = 'http://0.0.0.0:8000/register'
